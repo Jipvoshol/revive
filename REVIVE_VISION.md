@@ -151,7 +151,7 @@ class Portra400(FilmLook):
 
 ## 📈 Roadmap
 
-### Phase 1: Core (v0.1) ✅ *We zijn hier*
+### Phase 1: Core (v0.1) ✅ 
 - [x] Basic RAW processing
 - [x] Smart denoising (OpenCV NLM + Edge Mask)
 - [x] Smart sharpening
@@ -171,21 +171,7 @@ class Portra400(FilmLook):
 - [ ] Nikon D700 profile
 - [ ] Leica M9 profile
 
-### Phase 4: Film Looks (v0.4)
-- [ ] Portra 400
-- [ ] Kodachrome 64
-- [ ] Fuji Velvia
 
----
-
-## 📣 Marketing Angle
-
-### Taglines:
-- *"Your camera deserves 2025 software"*
-- *"Full frame. Zeiss glass. AI processing."*
-- *"€300 camera. €0 software. €3000 results."*
-
----
 
 ## 📄 License
 
