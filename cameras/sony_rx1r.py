@@ -29,9 +29,10 @@ class SonyRX1R(CameraProfile):
     # Zeiss 35mm f/2 lens characteristics
     barrel_distortion: float = -0.008      # -0.8%
     vignette_strength: float = 0.15        # 2EV at f/2
-    italian_flag_strength: float = 0.015   # Color shift correction
-    shadow_warmth: float = -0.05           # Reduce red in shadows
-    green_blue_shift: float = 0.02         # Fix green→blue
+    italian_flag_strength: float = 0.0     # Disabled for now - needs calibration
+    shadow_warmth: float = 0.0             # Disabled for now - needs calibration
+    green_blue_shift: float = 0.0          # Disabled for now - needs calibration
+
     
     # Noise profile per ISO
     noise_profile = {

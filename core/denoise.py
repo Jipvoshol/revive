@@ -73,9 +73,8 @@ class Denoiser:
         else:
             return 10
     
-    def _denoise_standard(self, image: np.ndarray, h: int) -> np.ndarray:
         return cv2.fastNlMeansDenoisingColored(
-            image, None, h=h, hForColorComponents=h,
+            image, None, h=h, hColor=h,
             templateWindowSize=7, searchWindowSize=21
         )
     
@@ -89,11 +88,11 @@ class Denoiser:
         edge_mask = edge_mask[:, :, np.newaxis]
         
         denoised_strong = cv2.fastNlMeansDenoisingColored(
-            image, None, h=h, hForColorComponents=h,
+            image, None, h=h, hColor=h,
             templateWindowSize=7, searchWindowSize=21
         )
         denoised_light = cv2.fastNlMeansDenoisingColored(
-            image, None, h=max(2, h // 2), hForColorComponents=max(2, h // 2),
+            image, None, h=max(2, h // 2), hColor=max(2, h // 2),
             templateWindowSize=5, searchWindowSize=15
         )
         

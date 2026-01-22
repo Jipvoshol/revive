@@ -170,9 +170,11 @@ class Portra400(FilmLook):
 - [ ] Canon 5D Mark II profile
 - [ ] Nikon D700 profile
 - [ ] Leica M9 profile
+### Phase 4: Film Looks (v0.4)
+- [ ] Portra 400
+- [ ] Kodachrome 64
+- [ ] Fuji Velvia
 
-
-
-## 📄 License
+---
 
 **MIT License** — fully open source, no restrictions.

@@ -34,18 +34,33 @@ def get_raw_files(input_dir: Path) -> list[Path]:
 
 def save_image(image: np.ndarray, output_path: Path, 
                format: str = 'tiff', quality: int = 95):
-    """Save image to file."""
-    pil_img = Image.fromarray(image)
+    """Save image to file with maximum quality preservation."""
+    import cv2
     
-    if format.lower() == 'tiff':
-        pil_img.save(output_path, format='TIFF', compression='none')
-    elif format.lower() in ('jpg', 'jpeg'):
+    if format.lower() in ('jpg', 'jpeg'):
         if image.dtype == np.uint16:
             image_8bit = (image / 256).astype(np.uint8)
-            pil_img = Image.fromarray(image_8bit)
-        pil_img.save(output_path, format='JPEG', quality=quality)
+        else:
+            image_8bit = image
+        # Convert RGB to BGR for OpenCV
+        bgr = cv2.cvtColor(image_8bit, cv2.COLOR_RGB2BGR)
+        cv2.imwrite(str(output_path), bgr, [cv2.IMWRITE_JPEG_QUALITY, quality])
+    
+    elif format.lower() == 'tiff':
+        # OpenCV can write 16-bit TIFFs properly
+        # Convert RGB to BGR for OpenCV
+        bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        cv2.imwrite(str(output_path), bgr)
+        
     elif format.lower() == 'png':
-        pil_img.save(output_path, format='PNG')
+        if image.dtype == np.uint16:
+            # PNG supports 16-bit
+            bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            cv2.imwrite(str(output_path), bgr)
+        else:
+            bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            cv2.imwrite(str(output_path), bgr)
+
 
 
 def process_file(raw_path: Path,
@@ -131,8 +146,15 @@ Examples:
                        help='Sharpening strength 0-3 (default: 1.0)')
     parser.add_argument('--contrast', type=float, default=1.1,
                        help='Contrast multiplier (default: 1.1)')
+    parser.add_argument('--exposure', type=float, default=0.0,
+                       help='Exposure boost in EV (default: 0.0)')
+    parser.add_argument('--shadows', type=float, default=0.0,
+                       help='Shadow lift strength 0-1 (default: 0.0)')
+    parser.add_argument('--highlights', type=float, default=0.0,
+                       help='Highlight recovery strength 0-1 (default: 0.0)')
     parser.add_argument('--saturation', type=float, default=1.05,
                        help='Saturation multiplier (default: 1.05)')
+
     parser.add_argument('--no-curve', action='store_true',
                        help='Disable S-curve enhancement')
     parser.add_argument('--denoise', '-d', 
@@ -179,7 +201,10 @@ Examples:
     raw_processor = RawProcessor(use_camera_wb=True, output_bps=16)
     enhancer = Enhancer(
         contrast=args.contrast, 
+        exposure=args.exposure,
         saturation=args.saturation,
+        shadows=args.shadows,
+        highlights=args.highlights,
         apply_curve=not args.no_curve
     )
     sharpener = Sharpener(strength=args.sharpen)
